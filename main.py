@@ -29,7 +29,7 @@ snake_size = (10, 10)
 snake_speed = 10
 
 snake_tails = []
-
+time.sleep(1)
 for i in range(100):
     snake_tails.append([snake_pos['x'] + (i*10), snake_pos['y']])
 
@@ -41,11 +41,12 @@ food_pos = {
 }
 
 game_end = False
+# основной игровой цикл
 while not game_end:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_end = True
-
+        # обработка событий нажатий клавиш
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP and snake_pos['y_change'] == 0:
                 snake_pos['x_change'] = 0
@@ -59,35 +60,35 @@ while not game_end:
             elif event.key == pygame.K_RIGHT and snake_pos['x_change'] == 0:
                 snake_pos['x_change'] = snake_speed
                 snake_pos['y_change'] = 0
-
+    # задержка на итерацию цикла
     time.sleep(0.1)
-
+    # очистка экрана
     screen.fill((0, 0, 0))
 
     ltx = snake_pos['x']
     lty = snake_pos['y']
-
+    # следование хвоста за головой
     for i, v in enumerate(snake_tails):
         _ltx, _lty = snake_tails[i][0], snake_tails[i][1]
         snake_tails[i][0], snake_tails[i][1] = ltx, lty
         ltx, lty = _ltx, _lty
-
+    # при столкновении головы змейки со своим хвостом, та часть хвоста "откусывается"
     for i, v in enumerate(snake_tails):
         if (snake_pos['x'] + snake_pos['x_change'] == snake_tails[i][0] and snake_pos['y'] + snake_pos['y_change'] ==
                 snake_tails[i][1]):
             snake_tails = snake_tails[:i]
             break
-
+    # отрисовка хвоста змейки
     for t in snake_tails:
         pygame.draw.rect(screen, colors['snake_tail'], [
             t[0],
             t[1],
             snake_size[0],
             snake_size[1]])
-
+    # передвижение змейки за счет изменения координат на игровой сетке
     snake_pos['x'] += snake_pos['x_change']
     snake_pos['y'] += snake_pos['y_change']
-
+    # проходы змейки через экран
     if (snake_pos['x'] < -snake_size[0]):
         snake_pos['x'] = width
     elif (snake_pos['x'] > width):
@@ -97,7 +98,7 @@ while not game_end:
     elif (snake_pos['y'] > height):
         snake_pos['y'] = 0
 
-    # snake
+    # отрисовка головы змейки
     pygame.draw.rect(screen, colors['snake_head'], [
         snake_pos['x'],
         snake_pos['y'],
@@ -110,7 +111,7 @@ while not game_end:
         food_pos['y'],
         food_size[0],
         food_size[1]])
-
+    # рост змейки при съедании фруктов
     if (snake_pos['x'] == food_pos['x']
             and snake_pos['y'] == food_pos['y']):
         food_eaten += 1
