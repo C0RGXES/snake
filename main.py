@@ -2,8 +2,9 @@ import pygame
 import time
 import random
 
+# initialisation pygame
 pygame.init()
-
+# add screen size
 width, height = 640, 480
 screen = pygame.display.set_mode((width, height))
 
@@ -59,7 +60,7 @@ while not game_end:
                 snake_pos['x_change'] = snake_speed
                 snake_pos['y_change'] = 0
 
-    time.sleep(0.07)
+    time.sleep(0.1)
 
     screen.fill((0, 0, 0))
 
@@ -74,9 +75,7 @@ while not game_end:
     for i, v in enumerate(snake_tails):
         if (snake_pos['x'] + snake_pos['x_change'] == snake_tails[i][0] and snake_pos['y'] + snake_pos['y_change'] ==
                 snake_tails[i][1]):
-            print('You lose')
             snake_tails = snake_tails[:i]
-            # game_end = True
             break
 
     for t in snake_tails:
